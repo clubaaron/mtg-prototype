@@ -4,9 +4,9 @@ const mtg = require('mtgsdk');
 const app = express();
 
 app.get('/', function (req, res) {
-	mtg.card.find(3)
+	mtg.card.where({ name: 'Nicol Bolas, God-Pharaoh'})
 	.then(result => {
-	    res.send(result); // "Aether Revolt"
+	    res.send(result);
 	});
  //  	res.send('Hello World!');
 });
