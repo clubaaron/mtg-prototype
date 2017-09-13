@@ -4,9 +4,7 @@
     <h1 class="page-title"><%= title %></h1>
     <ul>
         <% sets.forEach(function(set) { %>
-            <li>
-                <a href="/set/<%= set.code %>"><%= set.name %></a>
-            </li>
+            <li><%= set.name %></li>
         <% }); %>
     </ul>
 </main>

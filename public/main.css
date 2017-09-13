@@ -1,0 +1,44 @@
+
+.page-title {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 20px 0 30px;
+}
+
+.set-wrapper {
+    padding: 0 60px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.mtg-card-wrapper {
+    margin-bottom: 20px;
+}
+
+.mtg-card {
+    height: 100%;
+    padding: 0;
+}
+
+.mtg-card .img-mask {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 0;
+    padding-top: 150%;
+    margin: 0 auto;
+}
+
+.mtg-card .img-mask > img {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.mtg-card a {
+    margin: 5px;
+    padding: 5px;
+}

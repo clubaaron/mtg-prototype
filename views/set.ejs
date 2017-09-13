@@ -1,0 +1,14 @@
+<%- include('globals/head') %>
+
+<main class="fluid-container set-wrapper">
+    <h1 class="page-title"><%= title %></h1>
+    <section class="row">
+        <% cards.forEach(function(card) { %>
+            <div class="mtg-card-wrapper col-12 col-sm-6 col-md-4 col-lg-3">
+                <%- include('card', { card: card }); %>
+            </div>
+        <% }); %>
+    </section>
+</main>
+
+<%- include('globals/footer') %>

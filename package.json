@@ -9,9 +9,15 @@
   "author": "ash",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.0",
     "ejs": "^2.5.7",
     "express": "^4.15.4",
+    "hapi": "^16.6.0",
+    "lodash.filter": "^4.6.0",
+    "lodash.take": "^4.1.1",
     "mtgsdk": "^0.3.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "request": "^2.81.0",
+    "vision": "^4.1.1"
   }
 }

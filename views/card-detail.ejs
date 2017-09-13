@@ -1,0 +1,19 @@
+<%- include('globals/head') %>
+
+<main class="fluid-container set-wrapper">
+    <h1 class="page-title"><%= title %></h1>
+    <section class="row">
+        <%- include('card', { card: card }); %>
+    </section>
+    <section class="row">
+        <ul>
+            <li><%= card.name %></li>
+            <li><%= card.manaCost %></li>
+            <li><%= card.colors %></li>
+            <li><%= card.rarity %></li>
+            <li><%= card.text %></li>
+        </ul>
+    </section>
+</main>
+
+<%- include('globals/footer') %>
