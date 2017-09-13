@@ -1,0 +1,17 @@
+<nav class="nav justify-content-center pagination">
+    <% if (pagination.first) { %>
+        <a href="<%= pagination.first.url %>" class="nav-link"><< first</a>
+    <% } %>
+    <% if (pagination.prev) { %>
+        <a href="<%= pagination.prev.url %>" class="nav-link">< prev</a>
+    <% } %>
+
+    <span class="navbar-brand">I should have pagination.</span>
+
+    <% if (pagination.next) { %>
+        <a href="<%= pagination.next.url %>" class="nav-link">next ></a>
+    <% } %>
+    <% if (pagination.last) { %>
+        <a href="<%= pagination.last.url %>" class="nav-link">last >></a>
+    <% } %>
+</nav>
