@@ -4,6 +4,7 @@ const path = require('path');
 const ejs = require('ejs');
 const mtg = require('mtgsdk');
 const Request = require('request');
+const URLSearchParams = require('url-search-params');
 
 const app = express();
 
@@ -16,6 +17,13 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/public', express.static(path.join(__dirname, 'public')));
+
+function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(name.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+};
 
 app.get('/', function (req, res) {
 	Request.get('https://api.magicthegathering.io/v1/sets', (error, response, body) => {
@@ -54,7 +62,9 @@ app.get('/', function (req, res) {
 // });
 
 app.get('/set/:setCode', function (req, res) {
-	Request.get('https://api.magicthegathering.io/v1/cards?set=' + req.params.setCode, (error, response, body) => {
+	console.log('query : ', req.query.pageNum);
+	console.log(getUrlParameter('boogers'));
+	Request.get('https://api.magicthegathering.io/v1/cards?set=' + req.params.setCode + '&page=' + req.query.pageNum, (error, response, body) => {
 		if (error) {
 			throw error;
 		}
@@ -70,9 +80,15 @@ app.get('/set/:setCode', function (req, res) {
 		const getPagination = (headerElem) => {
 			let el = {};
 			let links = headerElem.split(',');
-
+			console.log(headerElem);
 			for (let i = 0; i < links.length; i++) {
-				let linkArray = links[i].split('; ');
+				let linkArray = links[i].trim().split('; ');
+
+				let mtgUrl = linkArray[0].substring(1, linkArray[0].length - 1);
+				// let page = new URLSearchParams(mtgUrl);
+				// let url =  new URL(mtgUrl);
+
+				let urlParams = new URLSearchParams(mtgUrl);
 
 				let key = linkArray[1];
 
@@ -89,7 +105,15 @@ app.get('/set/:setCode', function (req, res) {
 					key = 'first';
 				}
 
-				el[key] = { url: linkArray[0] };
+				// el[key] = {
+				// 	page: page.get('page'),
+				// 	set: page.get('set')
+				// };
+				el[key] = {
+					url : mtgUrl,
+					page: urlParams.get('page'),
+					set: urlParams.get('set')
+				};
 			}
 			console.log(el);
 			return el;
