@@ -1,0 +1,19 @@
+<%- include('../globals/head') %>
+<main>
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-3">Card Loading Interface</h1>
+        <p>We'll build some sort of interface here for loading cards into our DB.</p>
+        <p>Once that is going, we'll just make that a function call or something behind the scenes. Then this will become a page to build decks.</p>
+      </div>
+    </div>
+    <div class="container">
+        <%- messages() %>
+        <form method="post" action="/loader">
+            <h2 class="form-signin-heading">Add something here, we'll load that.</h2>
+            <p>... at some point.</p>
+            <button type="submit" class="btn btn-danger">Load that test card</button>
+        </form>
+    </div>
+</main>
+<%- include('../globals/footer') %>
