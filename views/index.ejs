@@ -1,14 +1,13 @@
 <%- include('globals/head') %>
-
-<main class="fluid-container">
-    <h1 class="page-title"><%= title %></h1>
-    <ul>
-        <% sets.forEach(function(set) { %>
-            <li>
-                <a href="/set/<%= set.code %>"><%= set.name %></a>
-            </li>
-        <% }); %>
-    </ul>
+<main>
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-3">Hello, <%= user.username %>!</h1>
+        <p>This is the entry page. For now, if you're logged in you can get the load cards page from here.</p>
+        <p>So, go ahead. Load some cards:</p>
+        <a class="btn btn-primary btn-lg" href="/loader" role="button">Load Cards &raquo;</a>
+        <a class="btn btn-secondary btn-lg" href="/deck-builder" role="button">Build Deck &raquo;</a>
+      </div>
+    </div>
 </main>
-
 <%- include('globals/footer') %>

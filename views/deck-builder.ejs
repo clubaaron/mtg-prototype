@@ -1,0 +1,35 @@
+<%- include('globals/head') %>
+<main>
+    <header class="jumbotron">
+      <div class="container">
+        <h1 class="display-3">Deck Builder</h1>
+        <% if (user.decks) { %>
+            <p>You currently have <span><%= user.decks.length %></span> decks</p>
+        <% } else { %>
+            <p>You don't have any decks.</p>
+            <form method="post" action="/deck-builder">
+                <button type="submit" class="btn btn-danger">Make New Deck +</button>
+            </form>
+        <% } %>
+      </div>
+    </header>
+
+    <%- messages() %>
+    <% if (user.decks) { %>
+        <div class="container">
+            <% user.decks.forEach(function(deck) { %>
+                <h3><%= deck.type %> Type Deck</h3>
+                <section class="row">
+                    <% deck.cards.forEach(function(card) { %>
+                        <div class="card">
+                            <img src="/public/images/card-back.png" />
+                            <p class="card-text"><%= card.name %></p>
+                        </card>
+                    <% }) %>
+                </section>
+            <% }); %>
+        </div>
+    <% } %>
+
+</main>
+<%- include('globals/footer') %>

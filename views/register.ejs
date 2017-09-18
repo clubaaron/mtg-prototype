@@ -1,0 +1,45 @@
+<%- include('globals/head') %>
+<main class="user">
+
+<div class="container">
+
+    <%- messages() %>
+
+    <% if (locals.errors) { %>
+        <section class="errors">
+            <% errors.forEach(function(error) { %>
+                <div class="alert alert-danger">
+                    <%= error.msg %>
+                </div>
+            <% }); %>
+        </section>
+    <% } %>
+
+    <form method="post" action="/users/register" class="form-signin">
+        <h2 class="form-signin-heading">User Registration</h2>
+        <label for="inputUsername">Username</label>
+        <input type="text" name="username" id="inputUsername" class="form-control" value="<%= (!!locals.username) ? username : '' %>" placeholder="Username" required autofocus>
+        <br>
+        <label for="inputFirstName">First Name</label>
+        <input type="text" name="firstName" id="inputFirstName" class="form-control" value="<%= (!!locals.firstName) ? firstName : '' %>" placeholder="First name" required>
+        <br>
+        <label for="inputLastName">Last Name</label>
+        <input type="text" name="lastName" id="inputLastName" class="form-control" value="<%= (!!locals.lastName) ? lastName : '' %>" placeholder="Last name" required>
+        <br>
+        <label for="inputEmail">Email</label>
+        <input type="text" name="email" id="inputEmail" class="form-control" value="<%= (!!locals.email) ? email : '' %>" placeholder="Email" required>
+        <br>
+        <label for="inputPassword">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" value="<%= (!!locals.password) ? password : '' %>" placeholder="Password" required>
+        <br>
+        <label for="inputPassword2">Confirm Password</label>
+        <input type="password" name="password2" id="inputPassword2" class="form-control" value="<%= (!!locals.password2) ? password2 : '' %>" placeholder="Confirm Password" required>
+        <br>
+        <p>Have Account? <a href="/users/login">Login</a></p>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Create Account</button>
+    </form>
+
+</div> <!-- /container -->
+
+</main>
+<%- include('globals/footer') %>

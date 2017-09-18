@@ -1,45 +1,113 @@
+const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
+const session = require('express-session');
+const expressValidator = require('express-validator');
+const passport = require('passport');
+const ejs = require('ejs');
 const bodyParser = require('body-parser');
 const path = require('path');
-const ejs = require('ejs');
+const flash = require('connect-flash');
 const mtg = require('mtgsdk');
 const Request = require('request');
 const URLSearchParams = require('url-search-params');
 
+const routes = require('./routes/index');
+const users = require('./routes/users');
+const loader = require('./routes/loader');
+
 const app = express();
 
 const PORT = 3000;
+const APP_NAME = 'mtg';
 
 // Set view engine.
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+// Static files.
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-function getUrlParameter(name) {
-    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-    var results = regex.exec(name.search);
-    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-};
+// BodyParser Middleware.
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/', function (req, res) {
-	Request.get('https://api.magicthegathering.io/v1/sets', (error, response, body) => {
-		if (error) {
-			throw error;
-		}
+// Express Session Middleware
+app.use(session({
+    secret: 'secret',
+    saveUnitialized: true,
+    resave: true
+}));
 
-		const data = JSON.parse(body);
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
-		res.render('index', {
-			title: 'MTG Set List',
-			sets: data.sets,
-			pagination: response.headers['link'],
-		});
-	});
+// Express Validator middleware.
+app.use(expressValidator({
+    errorFormatter: function(param, msg, value) {
+        var namespace = param.split('.'),
+            root = namespace.shift(),
+            formParam = root;
+
+        while(namespace.length) {
+            formParam += '[' + namespace.shif() + ']';
+        }
+
+        return {
+            param: formParam,
+            msg: msg,
+            value: value
+        };
+    }
+}));
+
+// Connect-Flash Middleware.
+app.use(flash());
+
+// Global variable - user.
+app.get('*', function(req, res, next) {
+	res.locals.title = req.title || null;
+	res.locals.user = req.user || null;
+    next();
 });
+
+app.get('*', function(req, res, next) {
+	console.log('just here, you know...');
+	next();
+});
+
+app.use(function(req, res, next) {
+    res.locals.messages = require('express-messages')(req, res);
+    next();
+});
+
+// Define routes
+app.use('/', routes);
+app.use('/users', users);
+app.use('/loader', loader);
+
+// function getUrlParameter(name) {
+//     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+//     var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+//     var results = regex.exec(name.search);
+//     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+// };
+
+// app.get('/', function (req, res) {
+// 	Request.get('https://api.magicthegathering.io/v1/sets', (error, response, body) => {
+// 		if (error) {
+// 			throw error;
+// 		}
+//
+// 		const data = JSON.parse(body);
+//
+// 		res.render('index', {
+// 			title: 'MTG Set List',
+// 			sets: data.sets,
+// 			pagination: response.headers['link'],
+// 		});
+// 	});
+// });
 //
 // app.get('/sets', function (req, res) {
 // 	mtg.set.where()
@@ -60,6 +128,7 @@ app.get('/', function (req, res) {
 // 		});
 // 	});
 // });
+
 
 app.get('/set/:setCode', function (req, res) {
 	console.log('query : ', req.query.pageNum);
@@ -127,30 +196,31 @@ app.get('/set/:setCode', function (req, res) {
 	});
 });
 
-app.get('/card/:cardID', function (req, res) {
-	mtg.card.find(req.params.cardID)
-	.then(result => {
-	    res.render('card-detail', {
-			title: result.card.name,
-			card: result.card,
-			pagination: null
-		});
-	});
-});
 
-app.get('/exampleCard', function (req, res) {
-	mtg.card.where({ name: 'Nicol Bolas, God-Pharaoh'})
-	.then(card => {
-	    res.send(card);
-	});
-});
+// app.get('/card/:cardID', function (req, res) {
+// 	mtg.card.find(req.params.cardID)
+// 	.then(result => {
+// 	    res.render('card-detail', {
+// 			title: result.card.name,
+// 			card: result.card,
+// 			pagination: null
+// 		});
+// 	});
+// });
 
-app.get('/exampleSet', function (req, res) {
-	mtg.set.find('AER')
-	.then(set => {
-	    res.send(set);
-	});
-});
+// app.get('/exampleCard', function (req, res) {
+// 	mtg.card.where({ name: 'Nicol Bolas, God-Pharaoh'})
+// 	.then(card => {
+// 	    res.send(card);
+// 	});
+// });
+//
+// app.get('/exampleSet', function (req, res) {
+// 	mtg.set.find('AER')
+// 	.then(set => {
+// 	    res.send(set);
+// 	});
+// });
 
 app.listen(PORT);
 console.log('server started on port %s', PORT);
