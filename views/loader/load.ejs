@@ -1,19 +1,32 @@
 <%- include('../globals/head') %>
 <main>
-    <div class="jumbotron">
+    <section class="jumbotron">
       <div class="container">
         <h1 class="display-3">Card Loading Interface</h1>
         <p>We'll build some sort of interface here for loading cards into our DB.</p>
         <p>Once that is going, we'll just make that a function call or something behind the scenes. Then this will become a page to build decks.</p>
       </div>
-    </div>
-    <div class="container">
+    </section>
+    <section class="container">
         <%- messages() %>
         <form method="post" action="/loader">
-            <h2 class="form-signin-heading">Add something here, we'll load that.</h2>
-            <p>... at some point.</p>
+            <div class="form-group">
+              <label for="cardName" class="h3">Load a card by name</label>
+              <input name="cardName" type="text" class="form-control" id="cardName" placeholder="Nicol Bolas, God Pharoah">
+            </div>
             <button type="submit" class="btn btn-danger">Load that test card</button>
         </form>
-    </div>
+    </section>
+    <section class="container mt-5">
+        <h3>Currently Loaded Cards</h3>
+        <ul class="list-group">
+        <% cards.forEach(function(card) { %>
+            <li class="<%= card.classes %>">
+                <%= card.name %>
+                <%= card.colors %>
+            </li>
+        <% }) %>
+        </ul>
+    </section>
 </main>
 <%- include('../globals/footer') %>
